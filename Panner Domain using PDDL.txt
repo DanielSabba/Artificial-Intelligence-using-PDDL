@@ -1,0 +1,290 @@
+﻿(define (domain piller)
+
+  (:requirements
+    :strips                 ; basic preconditions and effects
+    :negative-preconditions ; to use not in preconditions
+    :equality 
+    :adl
+	)
+
+	(:predicates
+	
+		(pill_has_allergies ?y)
+		(pre_pill_checkup ?y)
+		(before_breakfest_pill ?y)
+		(after_breakfest_pill ?y)
+		(before_lunch_pill ?y)
+		(after_lunch_pill ?y)
+		(before_dinner_pill ?y)
+		(after_dinner_pill ?y)
+		(need_to_invite_pill ?y)
+		
+		
+		(need_pill ?x ?y)
+        (need_usd ?x)
+        (need_op ?x)
+		(ate_breakfest ?x)
+		(ate_lunch ?x)
+		(ate_dinner ?x)
+		(patient_has_allergies ?x)
+		
+		(all_ate_breakfest ?b)
+		(all_ate_lunch ?b)
+		(all_ate_dinner ?b)
+		(is_all_ate_bool ?b)
+		
+		(is_room ?r)
+		(is_patient ?x)
+		
+		(is_meal ?m)
+		(order_special_meal ?n ?x ?m)
+		(meals_prepared ?m)
+
+		(is_usd_room ?r);2 new ones
+		(is_op_room ?r)
+        (is_doctor ?d)
+        (is_nurse ?n)
+        (is_nurse_room ?r)
+        (is_doctor_room ?r)
+        (doctor_need_tools ?d)
+        (nurse_need_tools ?n)
+        (has_tools ?dn);(tools_is_available ?t)
+        (doctor_at_room ?d ?x)
+        (nurse_at_room ?n ?x)
+        
+
+	)
+ ; @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Actions for pills @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ 
+        (:action take_pill
+        :parameters (?x ?y ?n)
+        :precondition(or
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (patient_has_allergies ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_breakfest ?x)) (not(ate_lunch ?x)) (not(ate_dinner ?x)) (before_breakfest_pill ?y))
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (patient_has_allergies ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_lunch ?x)) (not(ate_dinner ?x)) (ate_breakfest ?x) (after_breakfest_pill ?y))
+        
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (patient_has_allergies ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_lunch ?x)) (not(ate_dinner ?x)) (ate_breakfest ?x) (before_lunch_pill ?y))
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (patient_has_allergies ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_dinner ?x)) (ate_breakfest ?x) (ate_lunch ?x) (after_lunch_pill ?y))
+        
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (patient_has_allergies ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_dinner ?x)) (ate_breakfest ?x) (ate_lunch ?x) (before_dinner_pill ?y))
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (patient_has_allergies ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (ate_breakfest ?x) (ate_lunch ?x) (ate_dinner ?x) (after_dinner_pill ?y))
+        
+        ; @@@@@@@@@@ no allergies @@@@@@@@@
+
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_breakfest ?x)) (not(ate_lunch ?x)) (not(ate_dinner ?x)) (before_breakfest_pill ?y))
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_lunch ?x)) (not(ate_dinner ?x)) (ate_breakfest ?x) (after_breakfest_pill ?y))
+        
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_lunch ?x)) (not(ate_dinner ?x)) (ate_breakfest ?x) (before_lunch_pill ?y))
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_dinner ?x)) (ate_breakfest ?x) (ate_lunch ?x) (after_lunch_pill ?y))
+        
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (not(ate_dinner ?x)) (ate_breakfest ?x) (ate_lunch ?x) (before_dinner_pill ?y))
+        (and (is_patient ?x)(is_nurse ?n) (nurse_at_room ?n ?x) (not(pre_pill_checkup ?y)) (not(need_to_invite_pill ?y)) (not(pill_has_allergies ?y)) (ate_breakfest ?x) (ate_lunch ?x) (ate_dinner ?x) (after_dinner_pill ?y))
+            )
+        :effect(and
+        (not(need_pill ?x ?y)))
+    )
+		(:action eat_breakfest
+		:parameters (?x ?m ?n)
+		:precondition(and
+		(is_patient ?x)
+		(is_nurse ?n)
+		(nurse_at_room ?n ?x)
+		(is_meal ?m)
+		(meals_prepared ?m)
+		(not(ate_breakfest ?x))
+		)
+		:effect(and
+			(ate_breakfest ?x)
+	    )
+	)
+		(:action eat_lunch
+		:parameters (?x ?m ?b ?n)
+		:precondition(and
+		(is_patient ?x)
+		(is_nurse ?n)
+        (nurse_at_room ?n ?x)
+		(is_all_ate_bool ?b)
+		(is_meal ?m)
+		(meals_prepared ?m)
+		(all_ate_breakfest ?b)
+		(not(ate_lunch ?x))
+		)
+		:effect(and
+			(ate_lunch ?x)
+	    )
+    )
+		(:action eat_dinner
+		:parameters (?x ?m ?b ?n)
+		:precondition(and
+		(is_patient ?x)
+		(is_nurse ?n)
+        (nurse_at_room ?n ?x)
+        (is_all_ate_bool ?b)
+		(is_meal ?m)
+		(meals_prepared ?m)
+		(all_ate_lunch ?b)
+		(not(ate_dinner ?x))
+		)
+		:effect(and
+			(ate_dinner ?x)
+	    )
+	)
+	    (:action check_before_taking_pill
+	    :parameters (?x ?y ?n)
+	    :precondition(and
+	        (need_pill ?x ?y)
+	        (pre_pill_checkup ?y)
+	        (is_nurse ?n)
+	        (nurse_at_room ?n ?x)
+	        )
+	    :effect(and
+	        (not(pre_pill_checkup ?y))
+	    )     
+	)
+	    (:action invite_pill 
+	    :parameters (?y ?r ?n)
+	    :precondition(and
+	    (is_nurse ?n)
+	    (is_nurse_room ?r)
+	    (nurse_at_room ?n ?r)
+	    (need_to_invite_pill ?y))
+	    :effect(and
+	    (not(need_to_invite_pill ?y)))
+	)
+	    (:action get_no_allergie_pill
+	    :parameters(?y ?r ?n)
+	    :precondition(and
+	    (is_nurse ?n)
+	    (is_nurse_room ?r)
+	    (nurse_at_room ?n ?r)
+	    (pill_has_allergies ?y))
+	    :effect(and
+	    (not(pill_has_allergies ?y)))
+	)
+	
+	;@@@@@@@@@@@@@@@@@@ taking care of the doctors transportation @@@@@@@@@@
+	    (:action nurse_go_to_room
+	    :parameters (?n ?x ?r)
+	    :precondition(and
+	    (is_room ?r)
+	    (is_nurse ?n)
+	    (not(nurse_at_room ?n ?x))
+	    (nurse_at_room ?n ?r))
+	    :effect(and
+	    (nurse_at_room ?n ?x)
+	    (not(nurse_at_room ?n ?r))
+	    )
+	)
+	    (:action doctor_go_to_room
+	    :parameters (?d ?x ?r)
+	    :precondition (and
+	    (is_room ?r)
+	    (is_doctor ?d)
+	    (not(doctor_at_room ?d ?x))
+	    (doctor_at_room ?d ?r)
+	    )
+	    :effect (and
+	    (doctor_at_room ?d ?x)
+	    (not(doctor_at_room ?d ?r))
+	    )
+	)
+;new from here
+
+        (:action do_op
+        :parameters (?x ?r ?d)
+        :precondition (and 
+        (not(ate_breakfest ?x))(need_op ?x)(is_doctor ?d)(is_op_room ?r)(doctor_at_room ?d ?r)(has_tools ?d)
+        )
+        :effect (and
+        (not(need_op ?x))(not(has_tools ?d)))
+    )
+    
+        (:action get_tools
+        :parameters (?nd ?r)
+        :precondition (and
+        (or(and(nurse_at_room ?nd ?r)(is_nurse_room ?r)(is_nurse ?nd))(and(is_doctor ?nd)(is_doctor_room ?r)(doctor_at_room ?nd ?r)))
+        (not(has_tools ?nd))
+        )
+        :effect (and
+        (has_tools ?nd)
+        )
+    
+    )
+        (:action do_usd
+        :parameters (?x ?r ?n)
+        :precondition (and 
+        (not(ate_breakfest ?x))(is_nurse ?n)(need_usd ?x)(is_usd_room ?r)(nurse_at_room ?n ?r)(has_tools ?n)
+        )
+        :effect (and
+        (not(need_usd ?x))(not(has_tools ?n))
+        )
+    )
+    ; notice that this 3 actions is depended on how many patients input code has !!!
+        (:action approve_all_ate_breakfest
+        :parameters (?x1 ?x2 ?m ?b)
+        :precondition (and
+        (is_all_ate_bool ?b)
+        (is_meal ?m)
+        (meals_prepared ?m)
+        (not(= ?x1 ?x2))
+        (not(all_ate_breakfest ?b))
+        (ate_breakfest ?x1)
+        (ate_breakfest ?x2)
+        )
+        :effect (and
+        (all_ate_breakfest ?b)
+        (not(meals_prepared ?m))
+        )
+    )
+        (:action approve_all_ate_lunch
+        :parameters (?x1 ?x2 ?m ?b)
+        :precondition (and
+        (is_all_ate_bool ?b)
+        (is_meal ?m)
+        (meals_prepared ?m)
+        (not(= ?x1 ?x2))
+        (not(all_ate_lunch ?b))
+        (ate_lunch ?x1)
+        (ate_lunch ?x2)
+        )
+        :effect (and
+        (all_ate_lunch ?b)
+        (not(meals_prepared ?m))
+        )
+    )
+        (:action approve_all_ate_dinner
+        :parameters (?x1 ?x2 ?m ?b)
+        :precondition (and
+        (is_all_ate_bool ?b)
+        (is_meal ?m)
+        (meals_prepared ?m)
+        (not(= ?x1 ?x2))
+        (not(all_ate_dinner ?b))
+        (ate_dinner ?x1)
+        (ate_dinner ?x2)
+        )
+        :effect (and
+        (not(meals_prepared ?m))
+        (all_ate_dinner ?b)
+        )
+    )
+        (:action prepare_meals
+        :parameters (?n ?r ?m)
+        :precondition (and
+        (is_meal ?m)
+        (is_nurse ?n)
+        (is_nurse_room ?r)
+        (nurse_at_room ?n ?r)
+        (not(meals_prepared ?m))
+        )
+        :effect (and
+        (meals_prepared ?m)
+        )
+    )
+    
+)
+        
+        
+        
+        
+        
+        

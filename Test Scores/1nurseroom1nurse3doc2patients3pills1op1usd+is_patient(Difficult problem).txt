@@ -1,0 +1,53 @@
+Suspected timeout.
+
+ --- OK.
+ Match tree built with 536 nodes.
+
+PDDL problem description loaded: 
+	Domain: PILLER
+	Problem: NURSERY
+	#Actions: 536
+	#Fluents: 202
+Landmarks found: 10
+Starting search with IW (time budget is 60 secs)...
+rel_plan size: 27
+#RP_fluents 32
+Caption
+{#goals, #UNnachieved,  #Achieved} -> IW(max_w)
+
+{10/10/0}:IW(1) -> rel_plan size: 27
+#RP_fluents 32
+{10/8/2}:IW(1) -> [2][3][4][5][6][7][8]rel_plan size: 24
+#RP_fluents 28
+{10/7/3}:IW(1) -> [2][3][4][5][6][7][8][9][10][11][12][13][14][15][16][17][18][19];; NOT I-REACHABLE ;;
+Total time: 0.304
+Nodes generated during search: 2290
+Nodes expanded during search: 2187
+IW search completed
+Starting search with BFS(novel,land,h_add)...
+--[4294967295 / 124]--
+--[5 / 124]--
+--[5 / 93]--
+--[5 / 92]--
+--[5 / 91]--
+--[5 / 66]--
+--[5 / 65]--
+--[5 / 64]--
+--[5 / 62]--
+--[5 / 60]--
+--[5 / 58]--
+--[5 / 56]--
+--[5 / 54]--
+--[5 / 52]--
+--[5 / 50]--
+--[5 / 48]--
+--[5 / 46]--
+--[5 / 45]--
+--[5 / 44]--
+--[5 / 42]--
+--[5 / 38]--
+--[5 / 28]--
+--[5 / 26]--
+--[4 / 26]--
+--[4 / 19]--
+--[3 / 19]--

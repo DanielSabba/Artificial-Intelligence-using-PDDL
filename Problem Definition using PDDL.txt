@@ -1,0 +1,71 @@
+﻿(define (problem nursery)
+  (:domain piller)
+
+  (:objects nurse1 nurse2 nurse3 nurseroom1 nurseroom2
+            per1 per2 
+            pil1 pil2 pil3 
+            doctor1 doctor2 doctor3 doctorroom 
+            usdroom oproom chillroom 
+            meal allatebool
+            )
+
+  (:init
+    ;(is_nurse nurse3)  (nurse_at_room nurse3 chillroom)
+    (is_nurse nurse2)  (nurse_at_room nurse2 chillroom)
+    (is_nurse nurse1)  (nurse_at_room nurse1 chillroom)
+    
+    ;(is_doctor doctor3) (doctor_at_room doctor3 chillroom)
+    ;(is_doctor doctor2) (doctor_at_room doctor2 chillroom)
+    (is_doctor doctor1) (doctor_at_room doctor1 chillroom)
+    
+    (is_patient per1)(is_patient per2)
+    
+    (is_room nurseroom1) ;(is_room nurseroom2)
+    (is_room doctorroom)
+    (is_room usdroom)
+    (is_room oproom)
+    (is_room chillroom)
+    (is_room per1)
+    (is_room per2)
+    
+    (is_meal meal)
+    (is_all_ate_bool allatebool)
+    
+    (is_usd_room usdroom) 
+    (is_op_room oproom)
+    (is_nurse_room nurseroom1) ;(is_nurse_room nurseroom2)
+    (is_doctor_room doctorroom) 
+    
+    (patient_has_allergies per1)
+    
+    (after_lunch_pill pil2)
+    (need_to_invite_pill pil2)
+    (pill_has_allergies pil2) 
+    
+    (before_breakfest_pill pil1)
+    (pill_has_allergies pil1) 
+    (pre_pill_checkup pil1) 
+    
+    (after_dinner_pill pil3)
+    (need_to_invite_pill pil3)
+    
+    (need_op per1)
+    (need_usd per2)
+    
+    (need_pill per1 pil1) 
+    (need_pill per1 pil2) 
+    (need_pill per2 pil2) 
+    (need_pill per2 pil3)  
+  )
+
+  (:goal (and
+    (not(need_pill per1 pil1)) (not(need_pill per1 pil2))
+    (not(need_pill per2 pil1)) (not(need_pill per2 pil2)) (not(need_pill per2 pil3))
+    
+    (not(need_op per1)) (not(need_usd per2))
+    
+    (doctor_at_room doctor1 chillroom) ;(doctor_at_room doctor2 chillroom) ;(doctor_at_room doctor3 chillroom) 
+    (nurse_at_room nurse1 chillroom) 
+    (nurse_at_room nurse2 chillroom) ;(nurse_at_room nurse3 chillroom)
+  ))
+)
